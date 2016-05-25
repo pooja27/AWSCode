@@ -6,7 +6,7 @@
 // Retrieve
 var MongoClient = require('mongodb').MongoClient;
 
-exports.put = function(req, res) {
+exports.putHelloWorld = function(req, res) {
 	var val = req.body.value;
 	console.log(req.body.value);
 	MongoClient.connect("mongodb://localhost:27017/cmpe281final", function(err,
