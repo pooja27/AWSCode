@@ -6,30 +6,55 @@
 // Retrieve
 var MongoClient = require('mongodb').MongoClient;
 
+exports.put = function(req, res) {
+	var val = req.body.value;
+	console.log(req.body.value);
+	MongoClient.connect("mongodb://localhost:27017/cmpe281final", function(err,
+			db) {
+		if (err) {
+			console.dir(err);
+			res.status(503).send({
+				'count' : 0
+			});
+		} else {
+			var collection = db.collection('helloworld');
+			console.log(collection);
+			var doc1 = {
+				'value' : val
+			};
+			collection.insert(doc1);
+			res.status(200).send({ 'message' : "inserted"});
+		}
+	});
+}
 
-exports.getGumballCount = function(req, res) {
-    // Connect to the db
-    MongoClient.connect("mongodb://localhost:27017/cmpe281final", function(err, db) {
-            if (err) {
-                     console.dir(err);
-                     res.status(503).send({ 'count' : 0});
-            }
-            /*var collection = db.collection('gumball');
-            collection.find({color:'blue'}).toArray(function(err, items) {
-                    if(items.length > 0) {
-                            console.log(items);
-                            res.status(200).send(items);
-                    } else res.status(200).send(0);
-            });*/
+exports.getHelloWorld = function(req, res) {	
+    MongoClient.connect("mongodb://localhost:27017/cmpe281final", function(err, db) {console.log("Hello");
+	var options = {
+			host : mongo.URL,
+			port : mongo.PORT,
+			path : "/getHelloWorld",
+			method : 'GET'
+		};
 
-            console.log("Connected to host");
-            var collection = db.collection('gumball');
-            collection.findOne({color:'blue'} , function(err, item) {
-                    if(item == null) res.status(404).send({ 'count' : 0});
-                    console.log(item);
-                    res.status(200).send({ 'count' : item.count});
-            });
-    });
+		callback = function(response) {
+			var str = '';
+			console.log(response.statusCode);
+			response.on('error', function() {
+				console.log("Error in response: " + "\n" + str);
+
+			})
+			response.on('data', function(chunk) {
+				str += chunk;
+			});
+
+			response.on('end', function() {
+				var data = JSON.parse(str);
+				res.status(200).send(data);
+			});
+		}
+
+		http.get(options, callback).end();});
 };
 
 
